@@ -18,7 +18,7 @@ fenster = pg.display.set_mode(größe)
 
 
 clock = pg.time.Clock()
-zeit = 0 # es überprüft die Zeit vom Block
+zeit = 0 # kontrolliert die Fallzeit des Steins
 FPS = 40
 def zeichne_stein():
     x, y = stein_pos
@@ -30,6 +30,14 @@ def zeichne_stein():
 # Zeichenschleife mit FPS Bildern pro Sekunde
 while True:
   clock.tick(FPS)
+  dt = clock.get_time() #sammle die Zeit bei jede Frame 
+  zeit += dt
+
+  if zeit > 500:                      # jede 0.5 sekunde eine Zeile unten
+    if stein_pos[1] < ZEILEN - 1:     # wenn noch nicht ganz unten
+        stein_pos[1] += 1
+    zeit = 0
+
   fenster.fill('black')
   zeichne_stein()
 
