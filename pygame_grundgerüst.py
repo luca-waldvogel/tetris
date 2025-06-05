@@ -1,18 +1,13 @@
 import pygame as pg
 
+pg.init()
+
 ZEILEN = 20
 SPALTEN = 10
 BLOCK_GROESSE = 30
 
-# pygame ab Version 2.0 wird benötigt
-# Installation im Terminal mit
-#   --> pip install pygame (windows)
-#   --> pip3 install pygame (mac)
-#   --> sudo apt-get install python3-pygame (Linux Debian/Ubuntu/Mint)
-
 stein_pos = [SPALTEN // 2, 0] # Koodination des Blöckes mitte, ganz oben
 
-pg.init()
 grösse = breite, höhe = SPALTEN * BLOCK_GROESSE, ZEILEN * BLOCK_GROESSE
 fenster = pg.display.set_mode(grösse)
 
