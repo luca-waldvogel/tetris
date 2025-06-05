@@ -13,8 +13,8 @@ BLOCK_GROESSE = 30
 stein_pos = [SPALTEN // 2, 0] # Koodination des Blöckes mitte, ganz oben
 
 pg.init()
-größe = breite, höhe = SPALTEN * BLOCK_GROESSE, ZEILEN * BLOCK_GROESSE
-fenster = pg.display.set_mode(größe)
+grösse = breite, höhe = SPALTEN * BLOCK_GROESSE, ZEILEN * BLOCK_GROESSE
+fenster = pg.display.set_mode(grösse)
 
 
 clock = pg.time.Clock()
