@@ -16,11 +16,19 @@ def main():
     running = True
     fall_time = 0
     fall_speed = 30
+    speed_increase_interval = 5000  # alle 5 Sekunden schneller
+    last_speed_update = pygame.time.get_ticks()
     current = Piece(random.randint(0, 6))
 
     while running:
         clock.tick(30)
         fall_time += 1
+
+        # Geschwindigkeitserhöhung mit der Zeit
+        current_time = pygame.time.get_ticks()
+        if current_time - last_speed_update > speed_increase_interval:
+            fall_speed = max(5, fall_speed - 1)  # Minimale Geschwindigkeit 5
+            last_speed_update = current_time
 
         if fall_time >= fall_speed:
             if not current.move(0, 1):
@@ -45,14 +53,21 @@ def main():
                     current.move(0, 1)
                 elif event.key == pygame.K_UP:
                     current.rotate()
+                elif event.key == pygame.K_SPACE:
+                    # Block sofort auf den Boden bewegen
+                    while current.move(0, 1):
+                        pass
+                    current.lock()
+                    clear_lines()
+                    current = Piece(random.randint(0, 6))
+                    
 
+        # Spielfeld zeichnen
         win.fill((0, 0, 0))
         draw_field(win)
         current.draw(win)
-        draw_score(win)
+        draw_score(win)  
         pygame.display.update()
-
-    pygame.quit()
 
 if __name__ == "__main__":
     main()
