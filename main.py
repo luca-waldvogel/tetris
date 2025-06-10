@@ -1,4 +1,5 @@
 import pygame
+import sys
 pygame.init()
 import random
 from config import width, height
@@ -11,6 +12,12 @@ from ui import draw_score
 win = pygame.display.set_mode((width, height + 60))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
+
+def game_over():
+    print
+    "Game Over! Thanks for playing!"
+    pygame.quit()
+    sys.exit()
 
 def main():
     running = True
@@ -27,10 +34,13 @@ def main():
                 try:
                     current.lock()
                 except:
-                    running = False
-                    continue
+                    game_over()
+                
                 clear_lines()
                 current = Piece(random.randint(0, 6))
+
+                if not current.valid_position(current.row, current.col):
+                    game_over()
             fall_time = 0
 
         for event in pygame.event.get():
