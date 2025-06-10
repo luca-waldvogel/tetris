@@ -1,0 +1,17 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+*
+
+!.gitignore
+!*.py
+!README.md
+!requirements.txt
+
+
+__pycache__/
+*.pyc
+
+
+venv/
+.env/
+.vscode/
+
