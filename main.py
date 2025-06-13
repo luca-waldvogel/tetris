@@ -5,7 +5,7 @@ import random
 from config import width, height
 from field import draw_field, clear_lines
 from piece import Piece
-from ui import draw_score
+from ui import draw_score, draw_pause
 
 
 
@@ -56,28 +56,31 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    current.move(-1, 0)
-                elif event.key == pygame.K_RIGHT:
-                    current.move(1, 0)
-                elif event.key == pygame.K_DOWN:
-                    current.move(0, 1)
-                elif event.key == pygame.K_UP:
-                    current.rotate()
-                elif event.key == pygame.K_SPACE:
-                    # Block sofort auf den Boden bewegen
-                    while current.move(0, 1):
-                        pass
-                    current.lock()
-                    clear_lines()
-                    current = Piece(random.randint(0, 6))
-                elif event.key == pygame.K_p:
+                if event.key == pygame.K_p:
                     paused = not paused
+                if not paused:
+                    if event.key == pygame.K_LEFT:
+                        current.move(-1, 0)
+                    elif event.key == pygame.K_RIGHT:
+                        current.move(1, 0)
+                    elif event.key == pygame.K_DOWN:
+                        current.move(0, 1)
+                    elif event.key == pygame.K_UP:
+                        current.rotate()
+                    elif event.key == pygame.K_SPACE:
+                        # Block sofort auf den Boden bewegen
+                        while current.move(0, 1):
+                            pass
+                        current.lock()
+                        clear_lines()
+                        current = Piece(random.randint(0, 6))
+                
         if paused:
             win.fill((0, 0, 0))
             draw_field(win)
             current.draw(win)
             draw_score(win)
+            draw_pause(win)
             
             # Pausenanzeige
             font = pygame.font.SysFont("Arial", 36)
@@ -92,7 +95,8 @@ def main():
         win.fill((0, 0, 0))
         draw_field(win)
         current.draw(win)
-        draw_score(win)  
+        draw_score(win)
+        draw_pause(win)
         pygame.display.update()
 
 if __name__ == "__main__":
