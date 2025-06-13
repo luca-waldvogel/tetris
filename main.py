@@ -21,6 +21,7 @@ def game_over():
 
 def main():
     running = True
+    paused = False
     fall_time = 0
     fall_speed = 30
     speed_increase_interval = 5000  # alle 5 Sekunden schneller
@@ -29,7 +30,7 @@ def main():
 
     while running:
         clock.tick(30)
-        fall_time += 1
+        
 
         # Geschwindigkeitserhöhung mit der Zeit
         current_time = pygame.time.get_ticks()
@@ -70,8 +71,23 @@ def main():
                     current.lock()
                     clear_lines()
                     current = Piece(random.randint(0, 6))
-                    
+                elif event.key == pygame.K_p:
+                    paused = not paused
+        if paused:
+            win.fill((0, 0, 0))
+            draw_field(win)
+            current.draw(win)
+            draw_score(win)
+            
+            # Pausenanzeige
+            font = pygame.font.SysFont("Arial", 36)
+            pause_text = font.render("PAUSE", True, (255, 255, 255))
+            win.blit(pause_text, (width // 2 - pause_text.get_width() // 2, height // 2))
+            pygame.display.update()
+            continue  # Überspringt den Rest der Schleife
 
+        fall_time += 1
+        
         # Spielfeld zeichnen
         win.fill((0, 0, 0))
         draw_field(win)
