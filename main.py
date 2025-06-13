@@ -1,9 +1,7 @@
-import pygame
-import sys
+import pygame, sys, random
 pygame.init()
-import random
 from config import width, height
-from field import draw_field, clear_lines
+from field import draw_field, clear_lines, reset_field
 from piece import Piece
 from ui import draw_score, draw_pause
 
@@ -14,10 +12,29 @@ pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
 
 def game_over():
-    print
-    "Game Over! Thanks for playing!"
-    pygame.quit()
-    sys.exit()
+    font = pygame.font.SysFont("Arial", 48)
+    small_font = pygame.font.SysFont("Arial", 24)
+    text = font.render("GAME OVER", True, (255, 0, 0))
+    info = small_font.render("ESC = Beenden | R = Neustart", True, (255, 255, 255))
+
+    while True:
+        win.fill((0, 0, 0))
+        win.blit(text, (width // 2 - text.get_width() // 2, height // 2 - 30))
+        win.blit(info, (width // 2 - info.get_width() // 2, height // 2 + 30))
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                elif event.key == pygame.K_r:
+                    reset_field()
+                    main()  # Spiel neu starten
+                    return
 
 def main():
     running = True

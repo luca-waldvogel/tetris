@@ -29,5 +29,6 @@ def get_score():
     return score
 
 def reset_field():
-    global field
+    global field, score
     field = [[0 for _ in range(cols)] for _ in range(rows)]
+    score = 0
