@@ -9,7 +9,7 @@ def draw_score(surface):
     surface.blit(text, (10, height + 20))
 
 def draw_pause(surface):
-    text = font.render("'P' = Pause", True, (255, 255, 255))
+    text = font.render("P = Pause", True, (255, 255, 255))
     text_rect = text.get_rect()
     x_pos = width - text_rect.width - 10  # 10 Pixel Abstand vom rechten Rand
     surface.blit(text, (x_pos, height + 20))
