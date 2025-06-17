@@ -89,9 +89,15 @@ def main():
                     elif event.key == pygame.K_UP:
                         current.rotate()
                     elif event.key == pygame.K_SPACE:
-                        # Block sofort auf den Boden bewegen
+                        # Animiertes Fallen
                         while current.move(0, 1):
-                            pass
+                            win.fill((0, 0, 0))
+                            draw_field(win)
+                            current.draw(win)
+                            draw_score(win)
+                            draw_pause(win)
+                            pygame.display.update()
+                            pygame.time.delay(5)  # kleine Verspätung 
                         current.lock()
                         clear_lines()
                         current = Piece(random.randint(0, 6))
