@@ -45,6 +45,10 @@ def main():
     last_speed_update = pygame.time.get_ticks()
     current = Piece(random.randint(0, 6))
 
+    pygame.mixer.music.load("sound/Tetris.mp3")
+    pygame.mixer.music.set_volume(0.05)
+    pygame.mixer.music.play(-1)
+
     while running:
         clock.tick(30)
         

@@ -12,6 +12,8 @@ class Piece:
         self.color = COLORS[shape_index]
         self.row = 0
         self.col = cols // 2 - len(self.shape[0]) // 2
+        self.rotate_sound = pygame.mixer.Sound("sound/rotate.ogg")
+        self.rotate_sound.set_volume(0.2)
 
     def rotate(self):
         next_rotation = (self.rotation + 1) % len(self.rotations)
@@ -19,6 +21,7 @@ class Piece:
         if self.valid_position(self.row, self.col, next_shape):
             self.rotation = next_rotation
             self.shape = next_shape
+            self.rotate_sound.play()
 
     def valid_position(self, row, col, shape=None):
         shape = shape or self.shape
