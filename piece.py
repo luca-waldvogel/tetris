@@ -13,7 +13,7 @@ class Piece:
         self.row = 0
         self.col = cols // 2 - len(self.shape[0]) // 2
         self.rotate_sound = pygame.mixer.Sound("sound/rotate.ogg")
-        self.rotate_sound.set_volume(0.2)
+        self.rotate_sound.set_volume(0.3)
 
     def rotate(self):
         next_rotation = (self.rotation + 1) % len(self.rotations)

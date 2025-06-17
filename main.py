@@ -16,6 +16,11 @@ def game_over():
     small_font = pygame.font.SysFont("Arial", 24)
     text = font.render("GAME OVER", True, (255, 0, 0))
     info = small_font.render("ESC = Beenden | R = Neustart", True, (255, 255, 255))
+    pygame.mixer.music.set_volume(0.0)
+    game_over_sound = pygame.mixer.Sound("sound/game_over.mp3")
+    game_over_sound.set_volume(0.17)
+    game_over_sound.play()
+    
 
     while True:
         win.fill((0, 0, 0))
@@ -46,7 +51,7 @@ def main():
     current = Piece(random.randint(0, 6))
 
     pygame.mixer.music.load("sound/Tetris.mp3")
-    pygame.mixer.music.set_volume(0.05)
+    pygame.mixer.music.set_volume(0.15)
     pygame.mixer.music.play(-1)
 
     while running:
@@ -80,6 +85,7 @@ def main():
                 if event.key == pygame.K_p:
                     paused = not paused
                 if not paused:
+                    pygame.mixer.music.set_volume(0.15)
                     if event.key == pygame.K_LEFT:
                         current.move(-1, 0)
                     elif event.key == pygame.K_RIGHT:
@@ -108,6 +114,7 @@ def main():
             current.draw(win)
             draw_score(win)
             draw_pause(win)
+            pygame.mixer.music.set_volume(0.0)
             
             # Pausenanzeige
             font = pygame.font.SysFont("Arial", 36)
