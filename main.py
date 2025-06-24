@@ -116,19 +116,38 @@ def main():
     last_speed_update = pygame.time.get_ticks()
     current = Piece(random.randint(0, 6))
 
+    # Musik zu Beginn laden
     pygame.mixer.music.load("sound/Tetris.mp3")
     pygame.mixer.music.set_volume(0.15)
     pygame.mixer.music.play(-1)
 
+    # Musikwechsel vorbereiten
+    music_stage = 0  # 0 = normal, 1 = fast, 2 = faster
+    music_change_time = pygame.time.get_ticks() + 60000  # erste Stufe nach 1 Minute
+
     while running:
         clock.tick(30)
-        
+
+        # Aktuelle Zeit holen
+        current_time = pygame.time.get_ticks()        
 
         # Geschwindigkeitserhöhung mit der Zeit
         current_time = pygame.time.get_ticks()
         if current_time - last_speed_update > speed_increase_interval:
             fall_speed = max(5, fall_speed - 1)  # Minimale Geschwindigkeit 5
             last_speed_update = current_time
+
+        # Musikgeschwindigkeit ändern nach 1min und 2min
+        if current_time >= music_change_time:
+            if music_stage == 0:
+                pygame.mixer.music.load("sound/Tetris_fast.mp3")
+                pygame.mixer.music.play(-1)
+                music_stage = 1
+                music_change_time = current_time + 60000  # nächste Stufe in 1 min
+            elif music_stage == 1:
+                pygame.mixer.music.load("sound/Tetris_faster.mp3")
+                pygame.mixer.music.play(-1)
+                music_stage = 2
 
         if fall_time >= fall_speed:
             if not current.move(0, 1):
