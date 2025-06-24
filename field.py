@@ -42,3 +42,4 @@ def reset_field():
 def get_all_scores():
     return all_scores
 
+

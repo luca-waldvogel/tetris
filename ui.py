@@ -29,3 +29,4 @@ def draw_scoreboard(surface):
         surface.blit(text, (x_offset, y_offset + idx * 30))
 
 
+
