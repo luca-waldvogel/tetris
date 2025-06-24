@@ -1,0 +1,31 @@
+name: Python-Qualitätssicherung
+
+on: [push, pull_request]
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Code aus dem Repository holen
+        uses: actions/checkout@v4
+
+      - name: 2. Python-Umgebung einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+
+      - name: 3. Abhängigkeiten installieren (inkl. Dev-Tools)
+        run: |
+          pip install pygame
+          pip install flake8 black
+
+      - name: 4. Code-Formatierung prüfen (black)
+        # --check sorgt dafür, dass black einen Fehler wirft, wenn der Code nicht formatiert ist
+        run: black . --check
+
+      - name: 5. Code auf Stilfehler prüfen (flake8)
+        run: flake8 .
+
+      - name: 6. Unit-Tests ausführen
+        # Dieser Schritt wird nur ausgeführt, wenn die vorherigen erfolgreich waren
+        run: python -m unittest
