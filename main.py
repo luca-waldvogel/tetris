@@ -1,15 +1,79 @@
 import pygame, sys, random
 pygame.init()
 from config import width, height
-from field import draw_field, clear_lines, reset_field, get_score, all_scores
+from field import draw_field, clear_lines, reset_field
 from piece import Piece
 from ui import draw_score, draw_pause, draw_scoreboard
-
 
 
 win = pygame.display.set_mode((width + 160, height + 60))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
+
+def start_screen():
+    """Startseite mit Buttons und Tastatur-Steuerung"""
+    font_title = pygame.font.SysFont("Arial", 48)
+    font_button = pygame.font.SysFont("Arial", 28)
+    font_small = pygame.font.SysFont("Arial", 16)
+    
+    # Button-Dimensionen
+    button_width = 180
+    button_height = 50
+    start_button_rect = pygame.Rect(width // 2 - button_width // 2, height // 2 - 10, button_width, button_height)
+    quit_button_rect = pygame.Rect(width // 2 - button_width // 2, height // 2 + 60, button_width, button_height)
+    
+    while True:
+        mouse_pos = pygame.mouse.get_pos()
+        
+        win.fill((0, 0, 0))
+        
+        # Titel
+        title_text = font_title.render("TETRIS", True, (255, 255, 255))
+        win.blit(title_text, (width // 2 - title_text.get_width() // 2, height // 3))
+        
+        # Start Button
+        start_hover = start_button_rect.collidepoint(mouse_pos)
+        start_color = (0, 180, 0) if start_hover else (0, 120, 0)
+        pygame.draw.rect(win, start_color, start_button_rect)
+        pygame.draw.rect(win, (255, 255, 255), start_button_rect, 2)
+        
+        start_text = font_button.render("START", True, (255, 255, 255))
+        start_text_rect = start_text.get_rect(center=start_button_rect.center)
+        win.blit(start_text, start_text_rect)
+        
+        # Beenden Button
+        quit_hover = quit_button_rect.collidepoint(mouse_pos)
+        quit_color = (180, 0, 0) if quit_hover else (120, 0, 0)
+        pygame.draw.rect(win, quit_color, quit_button_rect)
+        pygame.draw.rect(win, (255, 255, 255), quit_button_rect, 2)
+        
+        quit_text = font_button.render("BEENDEN", True, (255, 255, 255))
+        quit_text_rect = quit_text.get_rect(center=quit_button_rect.center)
+        win.blit(quit_text, quit_text_rect)
+        
+       
+        
+        pygame.display.update()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Linke Maustaste
+                    if start_button_rect.collidepoint(mouse_pos):
+                        return  # Spiel starten
+                    elif quit_button_rect.collidepoint(mouse_pos):
+                        pygame.quit()
+                        sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    return  # Spiel starten
+                elif event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+        
+        clock.tick(60)
 
 def game_over():
     font = pygame.font.SysFont("Arial", 48)
@@ -20,21 +84,12 @@ def game_over():
     game_over_sound = pygame.mixer.Sound("sound/game_over.mp3")
     game_over_sound.set_volume(0.17)
     game_over_sound.play()
-
-    # Letzten Score in die Liste einfügen, wenn er Top 5 ist
-    punktzahl = get_score()
-    all_scores.append(punktzahl)
-    all_scores.sort(reverse=True)
-    if len(all_scores) > 10:
-        all_scores.pop()  # nur Top 10 behalten
-
     
 
     while True:
         win.fill((0, 0, 0))
         win.blit(text, (width // 2 - text.get_width() // 2, height // 2 - 30))
         win.blit(info, (width // 2 - info.get_width() // 2, height // 2 + 30))
-        draw_scoreboard(win)
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -53,25 +108,45 @@ def game_over():
 def main():
     running = True
     paused = False
+    music_on = True
     fall_time = 0
     fall_speed = 30
     speed_increase_interval = 5000  # alle 5 Sekunden schneller
     last_speed_update = pygame.time.get_ticks()
     current = Piece(random.randint(0, 6))
 
+    # Musik zu Beginn laden
     pygame.mixer.music.load("sound/Tetris.mp3")
     pygame.mixer.music.set_volume(0.15)
     pygame.mixer.music.play(-1)
 
+    # Musikwechsel vorbereiten
+    music_stage = 0  # 0 = normal, 1 = fast, 2 = faster
+    music_change_time = pygame.time.get_ticks() + 60000  # erste Stufe nach 1 Minute
+
     while running:
         clock.tick(30)
-        
+
+        # Aktuelle Zeit holen
+        current_time = pygame.time.get_ticks()        
 
         # Geschwindigkeitserhöhung mit der Zeit
         current_time = pygame.time.get_ticks()
         if current_time - last_speed_update > speed_increase_interval:
             fall_speed = max(5, fall_speed - 1)  # Minimale Geschwindigkeit 5
             last_speed_update = current_time
+
+        # Musikgeschwindigkeit ändern nach 1min und 2min
+        if current_time >= music_change_time:
+            if music_stage == 0:
+                pygame.mixer.music.load("sound/Tetris_fast.mp3")
+                pygame.mixer.music.play(-1)
+                music_stage = 1
+                music_change_time = current_time + 60000  # nächste Stufe in 1 min
+            elif music_stage == 1:
+                pygame.mixer.music.load("sound/Tetris_faster.mp3")
+                pygame.mixer.music.play(-1)
+                music_stage = 2
 
         if fall_time >= fall_speed:
             if not current.move(0, 1):
@@ -95,6 +170,13 @@ def main():
                     paused = not paused
                 if not paused:
                     pygame.mixer.music.set_volume(0.15)
+                    if event.key == pygame.K_m:
+                        if music_on:
+                            pygame.mixer.music.set_volume(0.0)
+                            music_on = False
+                        else:
+                            pygame.mixer.music.set_volume(0.15)
+                            music_on = True
                     if event.key == pygame.K_LEFT:
                         current.move(-1, 0)
                     elif event.key == pygame.K_RIGHT:
@@ -111,7 +193,6 @@ def main():
                             current.draw(win)
                             draw_score(win)
                             draw_pause(win)
-                            draw_scoreboard(win)
                             pygame.display.update()
                             pygame.time.delay(5)  # kleine Verspätung 
                         current.lock()
@@ -146,5 +227,6 @@ def main():
         pygame.display.update()
 
 if __name__ == "__main__":
+    start_screen()
     main()
     
