@@ -4,6 +4,8 @@ from shapes import COLORS, BLACK, GRAY
 
 field = [[0 for _ in range(cols)] for _ in range(rows)]
 score = 0
+all_scores = []  # alle Scores sammeln
+
 
 def draw_field(surface):
     for y in range(rows):
@@ -36,3 +38,7 @@ def reset_field():
     global field, score
     field = [[0 for _ in range(cols)] for _ in range(rows)]
     score = 0
+
+def get_all_scores():
+    return all_scores
+
