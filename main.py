@@ -25,8 +25,8 @@ def game_over():
     punktzahl = get_score()
     all_scores.append(punktzahl)
     all_scores.sort(reverse=True)
-    if len(all_scores) > 5:
-        all_scores.pop()  # nur Top 5 behalten
+    if len(all_scores) > 10:
+        all_scores.pop()  # nur Top 10 behalten
 
     
 
