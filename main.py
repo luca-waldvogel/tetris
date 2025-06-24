@@ -6,7 +6,6 @@ from piece import Piece
 from ui import draw_score, draw_pause, draw_scoreboard
 
 
-
 win = pygame.display.set_mode((width + 160, height + 60))
 pygame.display.set_caption("Tetris")
 clock = pygame.time.Clock()
