@@ -18,7 +18,7 @@ def draw_scoreboard(surface):
     x_offset = width + 10
     y_offset = 10
     # Scoreboard-Hintergrund immer zeichnen
-    pygame.draw.rect(surface, (50, 50, 50), (width, 0, 160, height))  
+    pygame.draw.rect(surface, (0, 0, 0), (width, 0, 160, height))  
 
     title_text = font.render("Highscores", True, (255, 255, 255))
     surface.blit(title_text, (x_offset, y_offset))
