@@ -3,7 +3,7 @@ pygame.init()
 from config import width, height
 from field import draw_field, clear_lines, reset_field
 from piece import Piece
-from ui import draw_score, draw_pause
+from ui import draw_score, draw_pause, draw_scoreboard
 
 
 win = pygame.display.set_mode((width + 160, height + 60))
@@ -205,6 +205,7 @@ def main():
             current.draw(win)
             draw_score(win)
             draw_pause(win)
+            draw_scoreboard(win)
             pygame.mixer.music.set_volume(0.0)
             
             # Pausenanzeige
@@ -222,6 +223,7 @@ def main():
         current.draw(win)
         draw_score(win)
         draw_pause(win)
+        draw_scoreboard(win)
         pygame.display.update()
 
 if __name__ == "__main__":
