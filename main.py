@@ -44,6 +44,7 @@ def game_over():
 def main():
     running = True
     paused = False
+    music_on = True
     fall_time = 0
     fall_speed = 30
     speed_increase_interval = 5000  # alle 5 Sekunden schneller
@@ -86,6 +87,13 @@ def main():
                     paused = not paused
                 if not paused:
                     pygame.mixer.music.set_volume(0.15)
+                    if event.key == pygame.K_m:
+                        if music_on:
+                            pygame.mixer.music.set_volume(0.0)
+                            music_on = False
+                        else:
+                            pygame.mixer.music.set_volume(0.15)
+                            music_on = True
                     if event.key == pygame.K_LEFT:
                         current.move(-1, 0)
                     elif event.key == pygame.K_RIGHT:
