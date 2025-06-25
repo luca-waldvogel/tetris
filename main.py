@@ -1,7 +1,7 @@
 import pygame, sys, random
 pygame.init()
 from config import width, height
-from field import draw_field, clear_lines, reset_field
+from field import draw_field, clear_lines, reset_field, get_score, all_scores
 from piece import Piece
 from ui import draw_score, draw_pause, draw_scoreboard
 
@@ -84,12 +84,18 @@ def game_over():
     game_over_sound = pygame.mixer.Sound("sound/game_over.mp3")
     game_over_sound.set_volume(0.17)
     game_over_sound.play()
+    punktzahl = get_score()
+    all_scores.append(punktzahl)
+    all_scores.sort(reverse=True)
+    if len(all_scores) > 10:
+        all_scores.pop()
     
 
     while True:
         win.fill((0, 0, 0))
         win.blit(text, (width // 2 - text.get_width() // 2, height // 2 - 30))
         win.blit(info, (width // 2 - info.get_width() // 2, height // 2 + 30))
+        draw_scoreboard(win)
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -193,6 +199,7 @@ def main():
                             current.draw(win)
                             draw_score(win)
                             draw_pause(win)
+                            draw_scoreboard(win)
                             pygame.display.update()
                             pygame.time.delay(5)  # kleine Verspätung 
                         current.lock()
