@@ -175,7 +175,10 @@ def main():
                 if event.key == pygame.K_p:
                     paused = not paused
                 if not paused:
-                    pygame.mixer.music.set_volume(0.15)
+                    if music_on:
+                        pygame.mixer.music.set_volume(0.15)
+                    else:
+                        pygame.mixer.music.set_volume(0.0)
                     if event.key == pygame.K_m:
                         if music_on:
                             pygame.mixer.music.set_volume(0.0)
